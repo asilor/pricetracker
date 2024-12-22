@@ -1,0 +1,16 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Counter from '@/components/Counter.svelte'
+import { connection } from '@/lib/db'
+import { ObjectId } from 'mongodb'
+
+const { id } = Astro.params;
+const db = await connection();
+const collection = db.collection('products');
+const product = await collection.findOne({ _id: new ObjectId(id) });
+---
+
+<Layout>
+	<h1 class="text-4xl">{product.title}</h1>
+	<Counter client:idle />
+</Layout>

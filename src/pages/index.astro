@@ -1,9 +1,15 @@
 ---
-import Layout from '@/layouts/Layout.astro';
-import Counter from '@/components/Counter.svelte';
+import Layout from '@/layouts/Layout.astro'
+import { connection } from '@/lib/db'
+
+const db = await connection();
+const collection = db.collection('products');
+const products = await collection.find().toArray();
 ---
 
 <Layout>
 	<h1 class="text-4xl">Price Tracker</h1>
-	<Counter client:idle />
+	{products.map(product => (
+		<a href={`/prices/${product._id}`}>{product.title}</a>
+	))}
 </Layout>
