@@ -12,5 +12,5 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 
 <Layout>
 	<h1 class="text-4xl">{product.title}</h1>
-	<Counter client:idle />
+	<Counter client:load />
 </Layout>
