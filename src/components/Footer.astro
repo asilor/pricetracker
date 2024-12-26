@@ -1,0 +1,54 @@
+---
+import SiteLogo from "./SiteLogo.astro"
+---
+
+<footer class="border-t">
+    <div class="container mx-auto px-4 lg:px-8 py-6 lg:py-12">
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-8 mb-8 lg:mb-24">
+            <div class="col-span-2 space-y-4">
+                <SiteLogo />
+                <p>Find the best products at the best prices.</p>
+            </div>
+            <div class="col-span-1">
+                <h3 class="font-medium">About</h3>
+                <ul class="mt-4 space-y-2">
+                    <li>
+                        <a href="/" class="hover:underline">Link</a>
+                    </li>
+                    <li>
+                        <a href="/" class="hover:underline">Link</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-span-1">
+                <h3 class="font-medium">Resources</h3>
+                <ul class="mt-4 space-y-2">
+                    <li>
+                        <a href="/" class="hover:underline">Link</a>
+                    </li>
+                    <li>
+                        <a href="/" class="hover:underline">Link</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-span-1">
+                <h3 class="font-medium">Partners</h3>
+                <ul class="mt-4 space-y-2">
+                    <li>
+                        <a href="/" class="hover:underline">Link</a>
+                    </li>
+                    <li>
+                        <a href="/" class="hover:underline">Link</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t py-4 lg:flex items-center justify-between space-y-4">
+            <span class="text-sm">Copyright Price Tracker. All rights reserved.</span>
+            <div class="flex items-center space-x-4 text-sm">
+                <a href="/terms-and-conditions" class="hover:underline">Terms and Conditions</a>
+                <a href="/privacy-policy" class="hover:underline">Privacy policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
