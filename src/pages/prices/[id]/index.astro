@@ -12,7 +12,7 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 <Layout>
 	<section>
 		<div class="container mx-auto px-4">
-			<img src={product.image} alt={product.title} transition:name=`product-image-${product._id}` />
+			<img src={product.image} alt={product.title} />
 			<h1 class="text-4xl">{product.title}</h1>
 		</div>
 	</section>
