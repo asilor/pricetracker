@@ -1,0 +1,12 @@
+---
+const { product } = Astro.props;
+---
+
+<div>
+    <a href={`/prices/${product._id}`}>
+        <img src={product.image} alt={product.title} class="hover:scale-[102%] transition" transition:name=`product-image-${product._id}` />
+    </a>
+    <h2 class="text-xl font-cabinet-grotesk hover:underline">
+        <a href={`/prices/${product._id}`}>{product.title}</a>
+    </h2>
+</div>

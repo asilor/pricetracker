@@ -1,5 +1,6 @@
 ---
 import Layout from '@/layouts/Layout.astro'
+import ProductCard from '@/components/ProductCard.astro';
 import { connection } from '@/lib/db'
 
 const db = await connection();
@@ -8,8 +9,14 @@ const products = await collection.find().toArray();
 ---
 
 <Layout>
-	<h1 class="text-4xl">Price Tracker</h1>
-	{products.map(product => (
-		<a href={`/prices/${product._id}`}>{product.title}</a>
-	))}
+	<section>
+		<div class="container mx-auto px-4">
+			<h1 class="text-4xl font-cabinet-grotesk">Price Tracker</h1>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				{products.map(product => (
+					<ProductCard product={product} />
+				))}
+			</div>
+		</div>
+	</section>
 </Layout>
