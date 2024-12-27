@@ -12,15 +12,15 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 
 <Layout>
 	<section class="overflow-hidden">
-		<div class="container mx-auto px-4 py-6">
-			<div class="mb-4 flex items-center space-x-2">
+		<div class="container mx-auto px-4 lg:px-8 py-6">
+			<div class="mb-8 flex items-center space-x-2">
 				<a href="/" class="hover:underline">Home</a>
 				<span>/</span>
 				<a href={`/category/${product.category}`} class="hover:underline">{product.category}</a>
 				<span>/</span>
 				<div class="text-neutral-600">{product.title}</div>
 			</div>
-			<div class="grid lg:grid-cols-2">
+			<div class="grid lg:grid-cols-2 gap-8">
 				<ProductImages images={product.images} thumbnails={product.thumbnails} client:idle />
 				<div>
 					<h1 class="text-4xl font-medium font-cabinet-grotesk">{product.title}</h1>
@@ -30,11 +30,11 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 			</div>
 		</div>
 	</section>
-	<section class="bg-gray-100">
-		<div class="container mx-auto px-4 py-6">
+	<section class="bg-gray-50">
+		<div class="container mx-auto px-4 lg:px-8 py-6">
 			<h2 class="text-4xl font-medium font-cabinet-grotesk">Product Prices</h2>
 			<div>
-				
+
 			</div>
 		</div>
 	</section>
