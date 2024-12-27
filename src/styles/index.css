@@ -14,6 +14,10 @@
   font-family: 'Cabinet Grotesk', sans-serif;
 }
 
+img {
+  -webkit-user-drag: none;
+}
+
 .product-image-position {
   transform-origin: var(--product-image-x) var(--product-image-y);
 }
