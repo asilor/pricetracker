@@ -3,14 +3,17 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'Cabinet Grotesk';
-    src: url('/fonts/CabinetGrotesk-Medium.woff2') format('woff2');
-    font-weight: 500;
-    font-display: swap;
-    font-style: normal;
-  }
-  
-  .font-cabinet-grotesk {
-    font-family: 'Cabinet Grotesk', sans-serif;
-  }
-  
+  font-family: 'Cabinet Grotesk';
+  src: url('/fonts/CabinetGrotesk-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+.font-cabinet-grotesk {
+  font-family: 'Cabinet Grotesk', sans-serif;
+}
+
+.product-image-position {
+  transform-origin: var(--product-image-x) var(--product-image-y);
+}
