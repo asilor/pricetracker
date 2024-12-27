@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import emblaCarouselSvelte from "embla-carousel-svelte";
   
     let { images, thumbnails } = $props();
@@ -39,7 +39,7 @@
 </script>
   
 <div class="flex bg-white">
-    <div class="flex-col space-y-4 flex-none w-16 mr-4 hidden md:block">
+    <div class="flex-col space-y-2 flex-none w-16 mr-4 hidden md:block">
       {#each thumbnails as thumbnail, index}
         <img
           src={thumbnail}
@@ -54,18 +54,18 @@
       use:emblaCarouselSvelte={{ options }}
       onemblaInit={initImages}
     >
-      <div class="flex space-x-16">
+      <div class="flex space-x-16 items-center">
         {#each images as image}
-          <button class="flex-none w-full object-contain cursor-zoom-in">
+          <div class="flex-none w-full object-contain cursor-zoom-in">
             <img
               src={image}
               alt="Main"
-              class="product-image-position md:hover:scale-200"
+              class="product-image-position md:hover:scale-[200%] mx-auto max-h-96"
               onmousemove={zoomIn}
               style:--product-image-x="{imagePosition.x}%"
               style:--product-image-y="{imagePosition.y}%"
             />
-          </button>
+          </div>
         {/each}
       </div>
       <div class="text-xs md:hidden bg-white/80 rounded-full px-1 absolute bottom-2 left-2">
