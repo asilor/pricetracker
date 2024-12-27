@@ -1,22 +1,24 @@
 ---
 import Layout from '@/layouts/Layout.astro'
-import ProductCard from '@/components/ProductCard.astro';
+import ProductsCarrousel from '@/components/ProductsCarrousel.svelte'
 import { connection } from '@/lib/db'
 
 const db = await connection();
 const collection = db.collection('products');
-const products = await collection.find().toArray();
+const products = (await collection.find().toArray()).map(product => ({
+    ...product,
+    _id: product._id.toString()
+}));
 ---
 
 <Layout>
-	<section>
-		<div class="container mx-auto px-4">
-			<h1 class="text-4xl font-medium font-cabinet-grotesk">Price Tracker</h1>
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-				{products.map(product => (
-					<ProductCard product={product} />
-				))}
+	<section class="overflow-hidden">
+		<div class="container mx-auto px-4 lg:px-8 py-6">
+			<div class="border-b pb-2 mb-8 flex items-center justify-between">
+				<h1 class="text-4xl font-medium font-cabinet-grotesk">Popular Products</h1>
+				<a href="/most-popular" class="hover:underline">View all</a>
 			</div>
+			<ProductsCarrousel products={products} client:idle />
 		</div>
 	</section>
 </Layout>
