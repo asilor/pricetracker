@@ -1,12 +1,13 @@
 ---
 import SiteLogo from "@/components/SiteLogo.astro"
+import SearchBox from "@/components/SearchBox.svelte"
 ---
 
 <header class="sticky top-0 z-50 flex items-center h-20 border-b bg-white/50 backdrop-blur-md">
     <div class="container mx-auto flex items-center px-4 lg:px-8 space-x-12">
         <SiteLogo />
         <nav>
-            <a href="/best-deals" class="text-sm hover:underline">Best Deals</a>
+            <SearchBox client:idle />
         </nav>
     </div>
 </header>
