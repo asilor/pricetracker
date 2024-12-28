@@ -11,7 +11,7 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 ---
 
 <Layout>
-	<section class="overflow-hidden">
+	<section id="prices" class="overflow-hidden">
 		<div class="container mx-auto px-4 lg:px-8 py-6">
 			<div class="mb-8 flex items-center space-x-2">
 				<a href="/" class="hover:underline">Home</a>
@@ -30,11 +30,20 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 			</div>
 		</div>
 	</section>
-	<section class="bg-gray-50">
-		<div class="container mx-auto px-4 lg:px-8 py-6">
-			<h2 class="text-4xl font-medium font-cabinet-grotesk">Product Prices</h2>
-			<div>
 
+	<section class="bg-neutral-50">
+		<div class="container mx-auto px-4 lg:px-8 py-6">
+			<h2 class="text-4xl font-medium font-cabinet-grotesk">Prices</h2>
+			<div class="space-y-4 flex flex-col mt-4">
+				<div class="border rounded p-4 bg-white">
+					<button class="text-white bg-yellow-400 px-4 py-2 rounded">View on Amazon</button>
+				</div>
+				<div class="border rounded p-4 bg-white">
+					<button class="text-white bg-yellow-400 px-4 py-2 rounded">View on Amazon</button>
+				</div>
+				<div class="border rounded p-4 bg-white">
+					<button class="text-white bg-yellow-400 px-4 py-2 rounded">View on Amazon</button>
+				</div>
 			</div>
 		</div>
 	</section>
