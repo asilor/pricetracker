@@ -1,6 +1,7 @@
 ---
 import Layout from '@/layouts/Layout.astro'
 import ProductImages from '@/components/ProductImages.svelte'
+import Sections from '@/components/Sections.svelte'
 import { connection } from '@/lib/db'
 import { ObjectId } from 'mongodb'
 
@@ -30,6 +31,8 @@ const product = await collection.findOne({ _id: new ObjectId(id) });
 			</div>
 		</div>
 	</section>
+
+	<Sections client:idle />
 
 	<section class="bg-neutral-50">
 		<div class="container mx-auto px-4 lg:px-8 py-6">
