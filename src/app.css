@@ -32,3 +32,7 @@ img {
 .font-cabinet-grotesk {
     font-family: var(--font-family-cabinet-grotesk);
 }
+
+.product-image-position {
+    transform-origin: var(--product-image-x) var(--product-image-y);
+}
