@@ -7,7 +7,7 @@
 </script>
 
 <Header />
-<main class="container px-3 py-4 mx-auto sm:px-6 overflow-x-hidden">
+<main class="container px-3 py-4 mx-auto sm:px-6">
     {@render children()}
 </main>
 <Footer />
