@@ -1,5 +1,5 @@
 <script>
-    const sections = ['product', 'prices', 'history'];
+    const { sections } = $props();
     let currentSection = $state(sections[0]);
 
     function scrollToSection(id) {
@@ -11,7 +11,7 @@
         const options = {
             root: null,
             rootMargin: '-10% 0px -80% 0px',
-            threshold: 0
+            threshold: 0.05
         };
 
         const observer = new IntersectionObserver((entries) => {

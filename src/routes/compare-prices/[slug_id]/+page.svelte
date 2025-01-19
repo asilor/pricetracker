@@ -28,7 +28,7 @@
     </div>
 </section>
 
-<ProductPageSections />
+<ProductPageSections sections={['product', 'prices', 'history']} />
 
 <section id="prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
@@ -42,6 +42,10 @@
 
 <section id="history" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
-        <h2 class="text-2xl font-cabinet-grotesk">History</h2>
+        <ul class="max-w-4xl space-y-4">
+            {#each Array.from({ length: 20 }) as price}
+                <ProductPriceCard />
+            {/each}
+        </ul>
     </div>
 </section>
