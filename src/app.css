@@ -21,7 +21,9 @@
     font-style: normal;
 }
 
-body {
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 115px;
     @apply font-inter;
 }
 

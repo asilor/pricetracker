@@ -1,0 +1,22 @@
+<script>
+    const sections = ['product', 'prices', 'details'];
+    let currentSection = $state(sections[0]);
+
+    function scrollToSection(id) {
+        const element = document.getElementById(id);
+        element.scrollIntoView();
+    }
+</script>
+
+<div class="sticky top-18 z-50 bg-white/80 backdrop-blur-2xl">
+    <ul class="container mx-auto flex items-center px-3 lg:px-6 space-x-8">
+        {#each sections as section}
+            <button
+                class="py-2 px-2 border-black text-lg cursor-pointer {currentSection === section ? 'border-b-2' :''}"
+                onclick={() => scrollToSection(section)}
+            >
+                {section.charAt(0).toUpperCase() + section.slice(1)}
+            </button>
+        {/each}
+    </ul>
+</div>
