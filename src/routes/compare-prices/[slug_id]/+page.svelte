@@ -1,12 +1,13 @@
 <script>
     import ProductImages from '$lib/components/ProductImages.svelte';
     import ProductPriceCard from '$lib/components/ProductPriceCard.svelte';
+    import ProductPageSections from '$lib/components/ProductPageSections.svelte';
 
     let { data } = $props();
     const product = data.product;
 </script>
 
-<section>
+<section id="product">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <div class="mb-8 flex items-center space-x-2">
             <a href="/" class="hover:underline">Home</a>
@@ -27,26 +28,20 @@
     </div>
 </section>
 
-<nav class="sticky top-0 z-50 bg-white">
-    <ul class="container mx-auto flex items-center px-4 lg:px-8 space-x-8">
-        <li class="px-2 py-4 border-b-2">
-            <a href="#description">Prices</a>
-        </li>
-        <li class="px-2 py-4">
-            <a href="#reviews">Price History</a>
-        </li>
-        <li class="px-2 py-4">
-            <a href="#faq">Details</a>
-        </li>
-    </ul>
-</nav>
+<ProductPageSections />
 
-<section class="bg-neutral-50">
+<section id="prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <ul class="max-w-4xl space-y-4">
-            {#each Array.from({ length: 10 }) as price}
+            {#each Array.from({ length: 20 }) as price}
                 <ProductPriceCard />
             {/each}
         </ul>
+    </div>
+</section>
+
+<section id="history" class="bg-neutral-50">
+    <div class="container px-3 py-8 mx-auto sm:px-6">
+        <h2 class="text-2xl font-cabinet-grotesk">History</h2>
     </div>
 </section>
