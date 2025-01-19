@@ -5,4 +5,6 @@
   const products = data.products;
 </script>
 
-<ProductsCarrousel {products} />
+<section class="container px-3 py-4 mx-auto sm:px-6">
+  <ProductsCarrousel products={products} />
+</section>
