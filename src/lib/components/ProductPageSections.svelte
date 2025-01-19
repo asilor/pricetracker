@@ -1,11 +1,34 @@
 <script>
-    const sections = ['product', 'prices', 'details'];
+    const sections = ['product', 'prices', 'history'];
     let currentSection = $state(sections[0]);
 
     function scrollToSection(id) {
         const element = document.getElementById(id);
-        element.scrollIntoView();
+        element.scrollIntoView({ behavior: 'smooth' });
     }
+
+    $effect(() => {
+        const options = {
+            root: null,
+            rootMargin: '-10% 0px -80% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    currentSection = entry.target.id;
+                }
+            });
+        }, options);
+
+        sections.forEach(section => {
+            const element = document.getElementById(section);
+            if (element) observer.observe(element);
+        });
+
+        return () => observer.disconnect();
+    });
 </script>
 
 <div class="sticky top-18 z-50 bg-white/80 backdrop-blur-2xl">
