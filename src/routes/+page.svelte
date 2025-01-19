@@ -1,12 +1,15 @@
 <script>
   import ProductsCarrousel from "$lib/components/ProductsCarrousel.svelte";
+  import Hero from "$lib/components/Hero.svelte";
 
   let { data } = $props();
   const products = data.products;
 </script>
 
-<section class="overflow-x-hidden">
-  <div class="container px-3 py-4 mx-auto sm:px-6">
+<Hero />
+
+<section class="overflow-x-hidde bg-neutral-50">
+  <div class="container px-3 py-8 mx-auto sm:px-6">
     <ProductsCarrousel products={products} />
   </div>
 </section>
