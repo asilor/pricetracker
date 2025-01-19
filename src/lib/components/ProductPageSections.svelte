@@ -10,7 +10,7 @@
     $effect(() => {
         const options = {
             root: null,
-            rootMargin: '-10% 0px -80% 0px',
+            rootMargin: '-8% 0px -75% 0px',
             threshold: 0.05
         };
 
