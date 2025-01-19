@@ -8,6 +8,10 @@
     const product = data.product;
 </script>
 
+<svelte:head>
+  <title>{product.title} Best Prices - Price Tracker</title>
+</svelte:head>
+
 <section id="product">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <div class="mb-8 flex items-center space-x-2">

@@ -6,6 +6,10 @@
   const products = data.products;
 </script>
 
+<svelte:head>
+  <title>Price Tracker ― Track and Compare Millions of Prices Accross All Major Retailers</title>
+</svelte:head>
+
 <Hero />
 
 <section class="overflow-x-hidden bg-neutral-50">
