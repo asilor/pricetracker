@@ -2,6 +2,7 @@
     import ProductImages from '$lib/components/ProductImages.svelte';
     import ProductPriceCard from '$lib/components/ProductPriceCard.svelte';
     import ProductPageSections from '$lib/components/ProductPageSections.svelte';
+    import PriceHistory from '$lib/components/PriceHistory.svelte';
 
     let { data } = $props();
     const product = data.product;
@@ -28,9 +29,9 @@
     </div>
 </section>
 
-<ProductPageSections sections={['product', 'prices', 'history']} />
+<ProductPageSections sections={['product', 'compare-prices', 'price-history']} />
 
-<section id="prices" class="bg-neutral-50">
+<section id="compare-prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <ul class="max-w-4xl space-y-4">
             {#each Array.from({ length: 20 }) as price}
@@ -40,12 +41,14 @@
     </div>
 </section>
 
-<section id="history" class="bg-neutral-50">
-    <div class="container px-3 py-8 mx-auto sm:px-6">
-        <ul class="max-w-4xl space-y-4">
-            {#each Array.from({ length: 20 }) as price}
-                <ProductPriceCard />
-            {/each}
-        </ul>
+<section id="price-history">
+    <div class="container px-3 py-8 mx-auto sm:px-6 space-y-8">
+        <div class="space-y-2">
+            <h2 class="text-4xl font-medium font-cabinet-grotesk">Price History</h2>
+            <p>The Price History graphs shows the price evolution of each retailer.</p>
+        </div>
+        <div class="max-w-4xl">
+            <PriceHistory />
+        </div>
     </div>
 </section>

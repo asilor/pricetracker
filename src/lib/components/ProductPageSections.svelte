@@ -7,6 +7,13 @@
         element.scrollIntoView({ behavior: 'smooth' });
     }
 
+    function formatTitle(text) {
+        return text.split('-').map(word => 
+            word.charAt(0).toUpperCase() + 
+            word.toLowerCase().slice(1)
+        ).join(' ');
+    }
+
     $effect(() => {
         const options = {
             root: null,
@@ -38,7 +45,7 @@
                 class="py-2 px-2 border-black text-lg cursor-pointer {currentSection === section ? 'border-b-2' :''}"
                 onclick={() => scrollToSection(section)}
             >
-                {section.charAt(0).toUpperCase() + section.slice(1)}
+                {formatTitle(section)}
             </button>
         {/each}
     </ul>
