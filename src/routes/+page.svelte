@@ -8,7 +8,7 @@
 
 <Hero />
 
-<section class="overflow-x-hidde bg-neutral-50">
+<section class="overflow-x-hidden bg-neutral-50">
   <div class="container px-3 py-8 mx-auto sm:px-6">
     <ProductsCarrousel products={products} />
   </div>
