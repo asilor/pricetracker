@@ -7,7 +7,7 @@
 </script>
 
 <Header />
-<main class="overflow-x-hidden">
+<main>
     {@render children()}
 </main>
 <Footer />
