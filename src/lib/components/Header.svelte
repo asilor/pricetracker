@@ -2,7 +2,7 @@
     import SearchBox from "$lib/components/SearchBox.svelte";
 </script>
 
-<header class="sticky top-0 bg-white/80 backdrop-blur-2xl border-b border-neutral-100 flex items-center h-18 z-50">
+<header class="sticky top-0 bg-white/80 backdrop-blur-2xl border-b border-neutral-200 flex items-center h-18 z-50">
     <div class="container mx-auto flex items-center px-4 lg:px-8 space-x-12">
         <a href="/" class="flex items-center space-x-3">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 380" class="h-6 w-6">
