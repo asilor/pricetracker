@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <title>Price Tracker ― Track and Compare Millions of Prices Accross All Major Retailers</title>
+  <title>Price Tracker FYI - Track and Compare Millions of Prices Accross All Major Retailers</title>
 </svelte:head>
 
 <Hero />
