@@ -6,6 +6,9 @@
 
     let { data } = $props();
     const product = data.product;
+    const prices = data.prices;
+
+    console.log(prices);
 </script>
 
 <svelte:head>
@@ -38,8 +41,8 @@
 <section id="compare-prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <ul class="max-w-4xl space-y-4">
-            {#each Array.from({ length: 20 }) as price}
-                <ProductPriceCard />
+            {#each prices as price}
+                <ProductPriceCard price={price} />
             {/each}
         </ul>
     </div>
