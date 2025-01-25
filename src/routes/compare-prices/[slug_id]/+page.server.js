@@ -47,7 +47,8 @@ export async function load({ params }) {
         retailer_name: "$retailer.name",
         retailer_logo_url: "$retailer.logo_url"
       }
-    }
+    },
+    { $sort: { price: 1 } }
   ]).toArray();
 
   return { product, prices };
