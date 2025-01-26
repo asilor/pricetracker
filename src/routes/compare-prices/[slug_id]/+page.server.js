@@ -1,13 +1,12 @@
 import { connection } from '$lib/db';
+import { locale } from '$lib/state/locale.svelte';
 import { ObjectId } from 'mongodb'
 
 export async function load({ params }) {
   const { slug_id } = params;
   const index = slug_id.lastIndexOf("-");  
   const variant_id = slug_id.substring(index + 1);
-  const language = "en";
-  const region = "ES";
-
+  
   const db = await connection();
   const variants_collection = db.collection('variants');
   
@@ -17,6 +16,7 @@ export async function load({ params }) {
         _id: new ObjectId(variant_id)
       }
     },
+    // join variant with product
     {
       $lookup: {
         from: "products",
@@ -28,43 +28,46 @@ export async function load({ params }) {
     {
       $unwind: "$product"
     },
+    // filter only the current language
     {
-      $project: {
-        _id: 1,
-        thumbnails: 1,
-        images: 1,
-        "languages": 1,
-        "regions": 1,
-        product: 1,
-        retailers: `$regions.${region}.retailers`
+      $set: {
+        // variant
+        variant_id: { $toString: "$_id" },
+        title: `$languages.${locale.language}.title`,
+        slug: `$languages.${locale.language}.slug`,
+        retailers: `$regions.${locale.region}.retailers`,
+
+        // product
+        description: `$product.languages.${locale.language}.description`
       }
     },
     {
       $unwind: "$retailers"
     },
+    // join retailers list with retailers collection
     {
       $lookup: {
         from: "retailers",
         localField: "retailers.retailer_id",
         foreignField: "_id",
-        as: "retailer_info"
+        as: "retailer"
       }
     },
     {
-      $unwind: "$retailer_info"
+      $unwind: "$retailer"
     },
     {
       $group: {
-        _id: "$_id",
-        variant_id: { $first: "$_id" },
+        _id: null,
+        variant_id: { $first: "$variant_id" },
         thumbnails: { $first: "$thumbnails" },
         images: { $first: "$images" },
-        title: { $first: `$languages.${language}.title` },
-        slug: { $first: `$languages.${language}.slug` },
+        title: { $first: "$title" },
+        slug: { $first: "$slug" },
         retailers: {
           $push: {
-            name: "$retailer_info.name",
-            logo_url: "$retailer_info.logo_url",
+            name: "$retailer.name",
+            logo_url: "$retailer.logo_url",
             link: "$retailers.link",
             shipping_cost: "$retailers.shipping_cost",
             price: "$retailers.price"
@@ -72,36 +75,21 @@ export async function load({ params }) {
         },
         categories: { $first: "$product.categories" },
         options: { $first: "$product.options" },
-        variants: { $first: "$product.variants" },
-        brand: { $first: "$product.brand" },
-        ratings: { $first: "$product.ratings" },
-        description: { $first: `$product.languages.${language}.description` }
-      }
-    },
-    {
-      $project: {
-        _id: 0,
-        variant_id: { $toString: "$variant_id" },
-        thumbnails: 1,
-        images: 1,
-        title: 1,
-        slug: 1,
-        retailers: 1,
-        categories: 1,
-        options: 1,
         variants: {
-          $map: {
-            input: "$variants",
-            as: "variant",
-            in: {
-              variant_id: { $toString: "$$variant.variant_id" },
-              values: "$$variant.values"
+          $first: {
+            $map: {
+              input: "$product.variants",
+              as: "variant",
+              in: {
+                variant_id: { $toString: "$$variant.variant_id" },
+                values: "$$variant.values"
+              }
             }
           }
         },
-        brand: 1,
-        ratings: 1,
-        description: 1
+        brand: { $first: "$product.brand" },
+        ratings: { $first: "$product.ratings" },
+        description: { $first: "$description" }
       }
     }
   ]).toArray();
