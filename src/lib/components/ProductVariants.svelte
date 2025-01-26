@@ -30,7 +30,7 @@
                     {@const variantForOption = findVariantForOption(option.key, value)}
                     {#if variantForOption}
                         <a 
-                            href="/{locale.language}/compare-prices/{variantForOption.variant_id}"
+                            href="/{locale.language}/compare-prices/{variantForOption.slug}-{variantForOption.variant_id}"
                             class="px-3 py-1 rounded-sm border border-neutral-300"
                         >
                             {value}

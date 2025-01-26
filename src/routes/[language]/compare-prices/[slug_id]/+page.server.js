@@ -50,7 +50,6 @@ export async function load({ params, parent }) {
       thumbnails: { $first: "$thumbnails" },
       images: { $first: "$images" },
       title: { $first: "$variant_language.title" },
-      slug: { $first: "$variant_language.slug" },
       brand: { $first: "$product.brand" },
       ratings: { $first: "$product.ratings" },
       description: { $first: "$product_language.description" },
@@ -71,7 +70,8 @@ export async function load({ params, parent }) {
           as: "variant",
           in: {
             variant_id: { $toString: "$$variant.variant_id" },
-            options: "$$variant.options"
+            options: "$$variant.options",
+            slug: `$$variant.languages.${locale.language}.slug`
           }
         }
       } },
