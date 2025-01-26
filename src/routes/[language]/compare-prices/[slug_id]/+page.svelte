@@ -17,7 +17,7 @@
         <div class="mb-8 flex items-center space-x-2">
             <a href="/" class="hover:underline">Home</a>
             <span>/</span>
-            <a href={`/category/${product.categories[0]}`} class="hover:underline">{product.categories[0]}</a>
+            <a href={`/c/${product.category.slug}`} class="hover:underline">{product.category.title}</a>
             <span>/</span>
             <div class="text-neutral-600">{product.title}</div>
         </div>

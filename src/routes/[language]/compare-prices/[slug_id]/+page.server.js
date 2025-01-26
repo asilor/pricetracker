@@ -2,14 +2,16 @@ import { connection } from '$lib/db';
 import { locale } from '$lib/state/locale.svelte';
 import { ObjectId } from 'mongodb'
 
-export async function load({ params }) {
+export async function load({ params, parent }) {
   const { slug_id } = params;
   const index = slug_id.lastIndexOf("-");  
   const variant_id = slug_id.substring(index + 1);
-  
+
   const db = await connection();
   const variants_collection = db.collection('variants');
   
+  await parent(); // update locale state first
+
   const product = await variants_collection.aggregate([
     { $match: { _id: new ObjectId(variant_id) } },
     // join variant with product
@@ -20,11 +22,20 @@ export async function load({ params }) {
         as: "product"
     } },
     { $unwind: "$product" },
+    // join product with categories
+    { $lookup: {
+      from: "categories",
+      localField: "product.category_id",
+      foreignField: "_id",
+      as: "category"
+    } },
+    { $unwind: "$category" },
     // filter only the current language and region
     { $set: {
         variant_language: `$languages.${locale.language}`,
         variant_region: `$regions.${locale.region}`,
-        product_language: `$product.languages.${locale.language}`
+        product_language: `$product.languages.${locale.language}`,
+        categories_language: `$category.languages.${locale.language}`
     } },
     // join variant retailers with retailers collection
     { $lookup: {
@@ -40,6 +51,7 @@ export async function load({ params }) {
       images: { $first: "$images" },
       title: { $first: "$variant_language.title" },
       slug: { $first: "$variant_language.slug" },
+      category: { $first: "$categories_language" },
       retailers: {
         $push: {
           name: "$retailer.name",
