@@ -5,7 +5,7 @@
     import PriceHistory from '$lib/components/PriceHistory.svelte';
 
     let { data } = $props();
-    const product = data.result;
+    const product = data.product;
 </script>
 
 <svelte:head>
