@@ -1,5 +1,6 @@
 <script>
     import ProductImages from '$lib/components/ProductImages.svelte';
+    import ProductVariants from '$lib/components/ProductVariants.svelte';
     import RetailerPriceCard from '$lib/components/RetailerPriceCard.svelte';
     import ProductPageSections from '$lib/components/ProductPageSections.svelte';
     import PriceHistory from '$lib/components/PriceHistory.svelte';
@@ -28,6 +29,8 @@
                 <h1 class="text-4xl font-medium font-cabinet-grotesk">{product.title}</h1>
                 <p>{product.description}</p>
                 <div >{product.price}</div>
+                <span>Variants</span>
+                <ProductVariants options={product.options} variants={product.variants} id={product._id} />
             </div>
         </div>
     </div>

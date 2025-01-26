@@ -12,7 +12,7 @@ export async function load({ params, parent }) {
   
   await parent(); // update locale state first
 
-  const product = await variants_collection.aggregate([
+  const [product] = await variants_collection.aggregate([
     { $match: { _id: new ObjectId(variant_id) } },
     // join variant with product
     { $lookup: {
@@ -63,13 +63,24 @@ export async function load({ params, parent }) {
       },
       categories: { $first: "$product.categories" },
       options: { $first: "$product.options" },
+      options: { $first: { 
+        $map: {
+          input: "$product.options",
+          as: "option",
+          in: {
+            name: `$$option.languages.${locale.language}.name`,
+            key: "$$option.key",
+            values: "$$option.values"
+          }
+        }
+      } },
       variants: { $first: {
         $map: {
           input: "$product.variants",
           as: "variant",
           in: {
             variant_id: { $toString: "$$variant.variant_id" },
-            values: "$$variant.values"
+            options: "$$variant.options"
           }
         }
       }},
@@ -77,7 +88,7 @@ export async function load({ params, parent }) {
       ratings: { $first: "$product.ratings" },
       description: { $first: "$product_language.description" }
     } }
-  ]).next();
+  ]).toArray();
 
   return { product };
 }
