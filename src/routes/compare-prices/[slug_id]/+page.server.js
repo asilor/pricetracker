@@ -3,53 +3,43 @@ import { ObjectId } from 'mongodb'
 
 export async function load({ params }) {
   const { slug_id } = params;
-  const index = slug_id.lastIndexOf("-");
-  const product_id = slug_id.substring(index + 1);
-  const region_id = "67942b3721cc010007e278df";
+  const index = slug_id.lastIndexOf("-");  
+  const variant_id = "679617d221cc010007e27926" //slug_id.substring(index + 1);
+  const language = "es";
+  const region = "ES";
 
   const db = await connection();
+  const variants_collection = db.collection('variants');
   const products_collection = db.collection('products');
-  const prices_collection = db.collection('prices');
 
-  const product = await products_collection.findOne(
-    { _id: new ObjectId(product_id) },
-    { projection: { _id: 0 } }
-  );
-  
-  const prices = await prices_collection.aggregate([
-    { 
-      $match: { 
-        "metadata.product_id": new ObjectId(product_id),
-        "metadata.region_id": new ObjectId(region_id)
-      } 
-    },
-    {
-      $group: {
-        _id: "$metadata.retailer_id",
-        price: { $first: "$price" },
-        timestamp: { $first: "$timestamp" }
-      }
-    },
-    {
-      $lookup: {
-        from: 'retailers',
-        localField: '_id',
-        foreignField: '_id',
-        as: 'retailer'
-      }
-    },
-    { $unwind: "$retailer" },
-    {
-      $project: {
-        _id: 0,
-        price: 1,
-        timestamp: 1,
-        retailer_name: "$retailer.name",
-        retailer_logo_url: "$retailer.logo_url"
-      }
-    },
-    { $sort: { price: 1 } }
-  ]).toArray();
+  const variant = await variants_collection.findOne({ _id: new ObjectId(variant_id) },);
+  const product = await products_collection.findOne({ _id: new ObjectId(variant.product_id) },);
 
-  return { product, prices };
+  const result = {
+    // variant
+    variant_id: variant._id.toString(),
+    thumbnails: variant.thumbnails,
+    images: variant.images,
+    title: variant.languages[language].title,
+    slug: variant.languages[language].slug,
+    retailers: variant.regions[region].retailers.map(retailer => ({
+      retailer_id: retailer.retailer_id.toString(),
+      link: retailer.link,
+      shipping_cost: retailer.shipping_cost,
+      price: retailer.price
+    })),
+
+    // product
+    categories: product.categories,
+    options: product.options,
+    variants: product.variants.map(variant => ({
+      variant_id: variant.variant_id.toString(),
+      values: variant.values
+    })),
+    brand: product.brand,
+    ratings: product.ratings,
+    description: product.languages[language].description
+  };
+
+  return { result };
 }

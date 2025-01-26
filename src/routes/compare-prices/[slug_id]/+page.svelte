@@ -1,14 +1,11 @@
 <script>
     import ProductImages from '$lib/components/ProductImages.svelte';
-    import ProductPriceCard from '$lib/components/ProductPriceCard.svelte';
+    import RetailerPriceCard from '$lib/components/RetailerPriceCard.svelte';
     import ProductPageSections from '$lib/components/ProductPageSections.svelte';
     import PriceHistory from '$lib/components/PriceHistory.svelte';
 
     let { data } = $props();
-    const product = data.product;
-    const prices = data.prices;
-
-    console.log(prices);
+    const product = data.result;
 </script>
 
 <svelte:head>
@@ -20,7 +17,7 @@
         <div class="mb-8 flex items-center space-x-2">
             <a href="/" class="hover:underline">Home</a>
             <span>/</span>
-            <a href={`/category/${product.category}`} class="hover:underline">{product.category}</a>
+            <a href={`/category/${product.categories[0]}`} class="hover:underline">{product.categories[0]}</a>
             <span>/</span>
             <div class="text-neutral-600">{product.title}</div>
         </div>
@@ -41,8 +38,8 @@
 <section id="compare-prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <ul class="max-w-4xl space-y-4">
-            {#each prices as price}
-                <ProductPriceCard price={price} />
+            {#each product.retailers as retailer}
+                <RetailerPriceCard retailer={retailer} />
             {/each}
         </ul>
     </div>
