@@ -51,18 +51,9 @@ export async function load({ params, parent }) {
       images: { $first: "$images" },
       title: { $first: "$variant_language.title" },
       slug: { $first: "$variant_language.slug" },
-      category: { $first: "$categories_language" },
-      retailers: {
-        $push: {
-          name: "$retailer.name",
-          logo_url: "$retailer.logo_url",
-          link: "$retailers.link",
-          shipping_cost: "$retailers.shipping_cost",
-          price: "$retailers.price"
-        }
-      },
-      categories: { $first: "$product.categories" },
-      options: { $first: "$product.options" },
+      brand: { $first: "$product.brand" },
+      ratings: { $first: "$product.ratings" },
+      description: { $first: "$product_language.description" },
       options: { $first: { 
         $map: {
           input: "$product.options",
@@ -83,10 +74,24 @@ export async function load({ params, parent }) {
             options: "$$variant.options"
           }
         }
-      }},
-      brand: { $first: "$product.brand" },
-      ratings: { $first: "$product.ratings" },
-      description: { $first: "$product_language.description" }
+      } },
+      category: { $first: "$categories_language" },
+      retailers: {
+        $push: {
+          $let: {
+            vars: {
+              retailerIndex: { $indexOfArray: ["$variant_region.retailers.retailer_id", "$retailer._id"] }
+            },
+            in: {
+              name: "$retailer.name",
+              logo_url: "$retailer.logo_url",
+              link: { $arrayElemAt: ["$variant_region.retailers.link", "$$retailerIndex"] },
+              shipping_cost: { $arrayElemAt: ["$variant_region.retailers.shipping_cost", "$$retailerIndex"] },
+              price: { $arrayElemAt: ["$variant_region.retailers.price", "$$retailerIndex"] }
+            }
+          }
+        }
+      } 
     } }
   ]).toArray();
 
