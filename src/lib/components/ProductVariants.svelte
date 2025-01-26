@@ -2,7 +2,7 @@
     import { locale } from '$lib/state/locale.svelte';
     let { options, variants, id } = $props();
 
-    const [currentVariant] = variants.filter(variant => variant.variant_id === id);
+    const [currentVariant] = $derived(variants.filter(variant => variant.variant_id === id));
 
     function findVariantForOption(optionKey, newValue) {
         return variants.find(variant => {
