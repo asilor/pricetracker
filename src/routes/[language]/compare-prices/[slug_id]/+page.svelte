@@ -4,9 +4,10 @@
     import RetailerPriceCard from '$lib/components/RetailerPriceCard.svelte';
     import ProductPageSections from '$lib/components/ProductPageSections.svelte';
     import PriceHistory from '$lib/components/PriceHistory.svelte';
+    import { locale } from '$lib/state/locale.svelte';
 
     let { data } = $props();
-    const product = data.product;
+    const product = $derived(data.product);
 </script>
 
 <svelte:head>
@@ -16,9 +17,9 @@
 <section id="product">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <div class="mb-8 flex items-center space-x-2">
-            <a href="/" class="hover:underline">Home</a>
+            <a href="/{locale.language}" class="hover:underline">Home</a>
             <span>/</span>
-            <a href={`/c/${product.category.slug}`} class="hover:underline">{product.category.title}</a>
+            <a href="/{locale.language}/c/{product.category.slug}" class="hover:underline">{product.category.title}</a>
             <span>/</span>
             <div class="text-neutral-600">{product.title}</div>
         </div>
