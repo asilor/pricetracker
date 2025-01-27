@@ -45,15 +45,15 @@ export async function load({ params, parent }) {
         as: "retailer"
     } },
     { $unwind: "$retailer"},
-    { $group: {
+    { $project: {
       _id: { $toString: "$_id" },
-      thumbnails: { $first: "$thumbnails" },
-      images: { $first: "$images" },
-      title: { $first: "$variant_language.title" },
-      brand: { $first: "$product.brand" },
-      ratings: { $first: "$product.ratings" },
-      description: { $first: "$product_language.description" },
-      options: { $first: { 
+      thumbnails: "$thumbnails",
+      images: "$images",
+      title: "$variant_language.title",
+      brand: "$product.brand",
+      ratings: "$product.ratings",
+      description: "$product_language.description",
+      options: {
         $map: {
           input: "$product.options",
           as: "option",
@@ -63,8 +63,8 @@ export async function load({ params, parent }) {
             values: "$$option.values"
           }
         }
-      } },
-      variants: { $first: {
+      },
+      variants: {
         $map: {
           input: "$product.variants",
           as: "variant",
@@ -74,26 +74,30 @@ export async function load({ params, parent }) {
             slug: `$$variant.languages.${locale.language}.slug`
           }
         }
-      } },
-      category: { $first: "$categories_language" },
+      },
+      category: "$categories_language",
       retailers: {
-        $push: {
-          $let: {
-            vars: {
-              retailerIndex: { $indexOfArray: ["$variant_region.retailers.retailer_id", "$retailer._id"] }
-            },
-            in: {
-              name: "$retailer.name",
-              logo_url: "$retailer.logo_url",
-              link: { $arrayElemAt: ["$variant_region.retailers.link", "$$retailerIndex"] },
-              shipping_cost: { $arrayElemAt: ["$variant_region.retailers.shipping_cost", "$$retailerIndex"] },
-              price: { $arrayElemAt: ["$variant_region.retailers.price", "$$retailerIndex"] }
+        $map: {
+          input: ["$retailer"],
+          as: "retailer",
+          in: {
+            $let: {
+              vars: {
+                index: { $indexOfArray: ["$variant_region.retailers.retailer_id", "$$retailer._id"] }
+              },
+              in: {
+                name: "$$retailer.name",
+                logo_url: "$$retailer.logo_url",
+                link: { $arrayElemAt: ["$variant_region.retailers.link", "$$index"] },
+                shipping_cost: { $arrayElemAt: ["$variant_region.retailers.shipping_cost", "$$index"] },
+                price: { $arrayElemAt: ["$variant_region.retailers.price", "$$index"] }
+              }
             }
           }
         }
-      } 
-    } }
+      }
+    }}
   ]).toArray();
-
+  
   return { product };
 }
