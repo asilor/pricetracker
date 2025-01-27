@@ -97,8 +97,6 @@ export async function load({ params, parent }) {
       }
     } }
   ]).toArray();
-
-  console.log(product.retailers);
   
   return { product };
 }
