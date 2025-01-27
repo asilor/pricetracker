@@ -27,12 +27,12 @@ export async function load({ parent }) {
         }
       }
     } },
-    { $group: {
+    { $project: {
       _id: { $toString: "$_id" },
-      title: { $first: `$languages.${locale.language}.title` },
-      images: { $first: "$images" },
-      slug: { $first: `$matched_variant.languages.${locale.language}.slug` },
-      discount: { $first: { $literal: 20 } }
+      images: "$images",
+      title: `$languages.${locale.language}.title`,
+      slug: `$matched_variant.languages.${locale.language}.slug`,
+      discount: { $literal: 20 }
     } }
   ]).toArray();
 
