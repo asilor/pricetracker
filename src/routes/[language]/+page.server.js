@@ -16,6 +16,7 @@ export async function load({ parent }) {
       foreignField: "_id",
       as: "product"
     } },
+    { $unwind: "$product" },
     { $addFields: {
       matched_variant: {
         $first: {
