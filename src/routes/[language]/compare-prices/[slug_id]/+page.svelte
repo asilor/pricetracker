@@ -3,15 +3,22 @@
     import ProductVariants from '$lib/components/ProductVariants.svelte';
     import RetailerPriceCard from '$lib/components/RetailerPriceCard.svelte';
     import ProductPageSections from '$lib/components/ProductPageSections.svelte';
-    import PriceHistory from '$lib/components/PriceHistory.svelte';
     import { locale } from '$lib/state/locale.svelte';
 
     let { data } = $props();
-    const product = $derived(data.product);
+    let product = $derived(data.product);
+
+    let schema = $derived({
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.title,
+        "description": product.description,
+    });
 </script>
 
 <svelte:head>
-  <title>{product.title} Best Prices - Price Tracker</title>
+<title>{product.title} Best Prices - Price Tracker</title>
+{@html `<script type="application/ld+json">${JSON.stringify(schema)}</script>`}
 </svelte:head>
 
 <section id="product">
@@ -37,7 +44,7 @@
     </div>
 </section>
 
-<ProductPageSections sections={['product', 'compare-prices', 'price-history']} />
+<ProductPageSections sections={['product', 'compare-prices', 'product-details']} />
 
 <section id="compare-prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
@@ -49,14 +56,11 @@
     </div>
 </section>
 
-<section id="price-history">
+<section id="product-details">
     <div class="container px-3 py-8 mx-auto sm:px-6 space-y-8">
-        <div class="space-y-2">
-            <h2 class="text-4xl font-medium font-cabinet-grotesk">Price History</h2>
-            <p>The Price History graphs shows the price evolution of each retailer.</p>
-        </div>
-        <div class="max-w-4xl">
-            <PriceHistory />
+        <div class="space-y-2 h-96">
+            <h2 class="text-4xl font-medium font-cabinet-grotesk">Product Details</h2>
+            <p>{product.description}</p>
         </div>
     </div>
 </section>
