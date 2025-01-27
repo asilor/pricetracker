@@ -39,12 +39,11 @@ export async function load({ params, parent }) {
     } },
     // join variant retailers with retailers collection
     { $lookup: {
-        from: "retailers",
-        localField: "variant_region.retailers.retailer_id",
-        foreignField: "_id",
-        as: "retailer"
+      from: "retailers",
+      localField: "variant_region.retailers.retailer_id",
+      foreignField: "_id",
+      as: "retailers"
     } },
-    { $unwind: "$retailer"},
     { $project: {
       _id: { $toString: "$_id" },
       thumbnails: "$thumbnails",
@@ -78,7 +77,7 @@ export async function load({ params, parent }) {
       category: "$categories_language",
       retailers: {
         $map: {
-          input: ["$retailer"],
+          input: "$retailers",
           as: "retailer",
           in: {
             $let: {
@@ -96,8 +95,10 @@ export async function load({ params, parent }) {
           }
         }
       }
-    }}
+    } }
   ]).toArray();
+
+  console.log(product.retailers);
   
   return { product };
 }
