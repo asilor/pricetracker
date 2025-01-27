@@ -9,6 +9,8 @@ export async function load({ params, parent }) {
 
   const db = await connection();
   const variants_collection = db.collection('variants');
+
+  const region_id = "6793e45d21cc010007e277a4";
   
   await parent(); // update locale state first
 
@@ -43,6 +45,27 @@ export async function load({ params, parent }) {
       localField: "variant_region.retailers.retailer_id",
       foreignField: "_id",
       as: "retailers"
+    } },
+    // join retailers with prices that match variant, region and retailer
+    { $lookup: {
+      from: "prices",
+      let: {
+        variant_id: "$_id",
+        region_id: new ObjectId(region_id),
+        retailer_ids: "$variant_region.retailers.retailer_id"
+      },
+      pipeline: [
+        { $match: {
+          $expr: {
+            $and: [
+              { $eq: ["$metadata.variant_id", "$$variant_id"] },
+              { $eq: ["$metadata.region_id", "$$region_id"] },
+              { $in: ["$metadata.retailer_id", "$$retailer_ids"] }
+            ]
+          }
+        } },
+      ],
+      as: "prices"
     } },
     { $project: {
       _id: { $toString: "$_id" },
@@ -82,14 +105,23 @@ export async function load({ params, parent }) {
           in: {
             $let: {
               vars: {
-                index: { $indexOfArray: ["$variant_region.retailers.retailer_id", "$$retailer._id"] }
+                index: { $indexOfArray: ["$variant_region.retailers.retailer_id", "$$retailer._id"] },
+                price_doc: { 
+                  $first: {
+                    $filter: {
+                      input: "$prices",
+                      cond: { $eq: ["$$this.metadata.retailer_id", "$$retailer._id"] }
+                    }
+                  }
+                }
               },
               in: {
                 name: "$$retailer.name",
                 logo_url: "$$retailer.logo_url",
                 link: { $arrayElemAt: ["$variant_region.retailers.link", "$$index"] },
                 shipping_cost: { $arrayElemAt: ["$variant_region.retailers.shipping_cost", "$$index"] },
-                price: { $arrayElemAt: ["$variant_region.retailers.price", "$$index"] }
+                price: "$$price_doc.price",
+                timestamp: "$$price_doc.timestamp"
               }
             }
           }
@@ -97,6 +129,8 @@ export async function load({ params, parent }) {
       }
     } }
   ]).toArray();
+
+  console.log(product.retailers)
   
   return { product };
 }
