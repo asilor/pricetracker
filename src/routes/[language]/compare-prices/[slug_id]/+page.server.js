@@ -6,16 +6,17 @@ export async function load({ params, parent }) {
   const { slug_id } = params;
   const index = slug_id.lastIndexOf("-");  
   const variant_id = slug_id.substring(index + 1);
+  
+  const variant_object_id = new ObjectId(variant_id);
+  const region_object_id = new ObjectId("6793e45d21cc010007e277a4");
 
   const db = await connection();
   const variants_collection = db.collection('variants');
-
-  const region_id = "6793e45d21cc010007e277a4";
   
   await parent(); // update locale state first
 
   const [product] = await variants_collection.aggregate([
-    { $match: { _id: new ObjectId(variant_id) } },
+    { $match: { _id: variant_object_id } },
     // join variant with product
     { $lookup: {
         from: "products",
@@ -46,11 +47,16 @@ export async function load({ params, parent }) {
       foreignField: "_id",
       as: "retailers"
     } },
-    // join variant with prices
+    // join prices with variant and region and sort by latest price
     { $lookup: {
       from: "prices",
-      localField: "_id",
-      foreignField: "metadata.variant_id",
+      pipeline: [
+        { $match: { 
+          "metadata.variant_id": variant_object_id,
+          "metadata.region_id": region_object_id
+        } },
+        { $sort: { timestamp: -1 } }
+      ],
       as: "prices"
     } },
     { $project: {
@@ -96,12 +102,7 @@ export async function load({ params, parent }) {
                   $first: {
                     $filter: {
                       input: "$prices",
-                      cond: {
-                        $and: [
-                          { $eq: ["$$this.metadata.retailer_id", "$$retailer._id"] },
-                          { $eq: ["$$this.metadata.region_id", new ObjectId(region_id)] }
-                        ]
-                      }
+                      cond: { $eq: ["$$this.metadata.retailer_id", "$$retailer._id"] }
                     }
                   }
                 }
@@ -120,8 +121,6 @@ export async function load({ params, parent }) {
       }
     } }
   ]).toArray();
-
-  console.log(product.retailers)
   
   return { product };
 }
