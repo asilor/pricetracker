@@ -46,25 +46,11 @@ export async function load({ params, parent }) {
       foreignField: "_id",
       as: "retailers"
     } },
-    // join retailers with prices that match variant, region and retailer
+    // join variant with prices
     { $lookup: {
       from: "prices",
-      let: {
-        variant_id: "$_id",
-        region_id: new ObjectId(region_id),
-        retailer_ids: "$variant_region.retailers.retailer_id"
-      },
-      pipeline: [
-        { $match: {
-          $expr: {
-            $and: [
-              { $eq: ["$metadata.variant_id", "$$variant_id"] },
-              { $eq: ["$metadata.region_id", "$$region_id"] },
-              { $in: ["$metadata.retailer_id", "$$retailer_ids"] }
-            ]
-          }
-        } },
-      ],
+      localField: "_id",
+      foreignField: "metadata.variant_id",
       as: "prices"
     } },
     { $project: {
@@ -75,6 +61,7 @@ export async function load({ params, parent }) {
       brand: "$product.brand",
       ratings: "$product.ratings",
       description: "$product_language.description",
+      category: "$categories_language",
       options: {
         $map: {
           input: "$product.options",
@@ -97,7 +84,6 @@ export async function load({ params, parent }) {
           }
         }
       },
-      category: "$categories_language",
       retailers: {
         $map: {
           input: "$retailers",
@@ -106,11 +92,16 @@ export async function load({ params, parent }) {
             $let: {
               vars: {
                 index: { $indexOfArray: ["$variant_region.retailers.retailer_id", "$$retailer._id"] },
-                price_doc: { 
+                filtered_prices: { 
                   $first: {
                     $filter: {
                       input: "$prices",
-                      cond: { $eq: ["$$this.metadata.retailer_id", "$$retailer._id"] }
+                      cond: {
+                        $and: [
+                          { $eq: ["$$this.metadata.retailer_id", "$$retailer._id"] },
+                          { $eq: ["$$this.metadata.region_id", new ObjectId(region_id)] }
+                        ]
+                      }
                     }
                   }
                 }
@@ -120,8 +111,8 @@ export async function load({ params, parent }) {
                 logo_url: "$$retailer.logo_url",
                 link: { $arrayElemAt: ["$variant_region.retailers.link", "$$index"] },
                 shipping_cost: { $arrayElemAt: ["$variant_region.retailers.shipping_cost", "$$index"] },
-                price: "$$price_doc.price",
-                timestamp: "$$price_doc.timestamp"
+                price: "$$filtered_prices.price",
+                timestamp: "$$filtered_prices.timestamp"
               }
             }
           }
