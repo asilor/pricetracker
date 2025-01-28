@@ -8,7 +8,7 @@ export async function load({ params, parent }) {
   const variant_id = slug_id.substring(index + 1);
   
   const variant_object_id = new ObjectId(variant_id);
-  const region_object_id = new ObjectId("6793e45d21cc010007e277a4");
+  const region_object_id = new ObjectId(locale.region_id);
 
   const db = await connection();
   const variants_collection = db.collection('variants');
@@ -36,7 +36,7 @@ export async function load({ params, parent }) {
     // filter only the current language and region
     { $set: {
         variant_language: `$languages.${locale.language}`,
-        variant_region: `$regions.${locale.region}`,
+        variant_region: `$regions.${locale.region_id}`,
         product_language: `$product.languages.${locale.language}`,
         categories_language: `$category.languages.${locale.language}`
     } },
