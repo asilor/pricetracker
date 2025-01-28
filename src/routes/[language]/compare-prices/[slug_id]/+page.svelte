@@ -33,11 +33,9 @@
 
         <div class="grid lg:grid-cols-2 gap-8">
             <ProductImages images={product.images} thumbnails={product.thumbnails} product={product} />
-            <div>
+            <div class="space-y-4">
                 <h1 class="text-4xl font-medium font-cabinet-grotesk">{product.title}</h1>
-                <p>{product.description}</p>
-                <div >{product.price}</div>
-                <span>Variants</span>
+                <p>Brand: {product.brand}</p>
                 <ProductVariants options={product.options} variants={product.variants} id={product._id} />
             </div>
         </div>

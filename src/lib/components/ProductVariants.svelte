@@ -38,7 +38,7 @@
                     {:else}
                         <button 
                             disabled
-                            class="px-3 py-1 rounded-sm border {currentVariant.options[option.key] === value ? 'cursor-pointer' : 'cursor-not-allowed border-neutral-300 text-neutral-400'}"
+                            class="px-3 py-1 rounded-sm border {currentVariant.options[option.key] === value ? 'border-blue-500 border-2 cursor-pointer' : 'cursor-not-allowed border-neutral-300 text-neutral-400 border-dashed'}"
                         >
                             {value}
                         </button>
