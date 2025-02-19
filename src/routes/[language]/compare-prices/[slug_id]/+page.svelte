@@ -8,6 +8,10 @@
     let { data } = $props();
     let product = $derived(data.product);
 
+    let retailers = $derived(
+        product.retailers.sort((a, b) => a.price - b.price)
+    );
+
     let schema = $derived({
         "@context": "https://schema.org",
         "@type": "Product",
@@ -47,7 +51,7 @@
 <section id="compare-prices" class="bg-neutral-50">
     <div class="container px-3 py-8 mx-auto sm:px-6">
         <ul class="max-w-4xl space-y-4">
-            {#each product.retailers as retailer}
+            {#each retailers as retailer}
                 <RetailerPriceCard retailer={retailer} />
             {/each}
         </ul>
